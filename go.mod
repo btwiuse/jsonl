@@ -1,3 +1,3 @@
-module mohamed.attahri.com/jsonl
+module github.com/btwiuse/jsonl
 
-go 1.20
+go 1.25

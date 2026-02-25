@@ -4,7 +4,7 @@ import (
 	"io"
 	"log"
 
-	"mohamed.attahri.com/jsonl"
+	"github.com/btwiuse/jsonl"
 )
 
 type Item = string

@@ -15,7 +15,7 @@ type Line json.RawMessage
 
 // Scan decodes l into v using
 // [json.Unmarshal].
-func (l Line) Scan(v interface{}) error {
+func (l Line) Scan(v any) error {
 	return json.Unmarshal(l, v)
 }
 

@@ -5,7 +5,7 @@ import (
 	"io"
 	"testing"
 
-	"mohamed.attahri.com/jsonl"
+	"github.com/btwiuse/jsonl"
 )
 
 var FixtureString = `{"name":"Gilbert","wins":[["straight","7♣"],["one pair","10♥"]]}

@@ -9,7 +9,6 @@ package main
 
 import (
 	"bytes"
-	"encoding/json"
 	"fmt"
 	"io"
 	"log"
@@ -32,27 +31,6 @@ type Term struct {
 	Cols int    `json:"cols"`
 	Rows int    `json:"rows"`
 	Type string `json:"type"`
-}
-
-// Event represents an asciicast v3 event: [time, type, data].
-type Event struct {
-	Time float64
-	Type string
-	Data string
-}
-
-func (e *Event) UnmarshalJSON(b []byte) error {
-	var raw [3]json.RawMessage
-	if err := json.Unmarshal(b, &raw); err != nil {
-		return err
-	}
-	if err := json.Unmarshal(raw[0], &e.Time); err != nil {
-		return err
-	}
-	if err := json.Unmarshal(raw[1], &e.Type); err != nil {
-		return err
-	}
-	return json.Unmarshal(raw[2], &e.Data)
 }
 
 // sample contains an embedded asciicast v3 session for demonstration.
@@ -100,7 +78,7 @@ func main() {
 }
 
 // parse reads an asciicast v3 JSONL stream and returns the header and events.
-func parse(src io.Reader) (*Header, []Event, error) {
+func parse(src io.Reader) (*Header, []jsonl.Event, error) {
 	s := jsonl.NewScanner(src)
 	s.SkipBlank = true
 	s.SkipComments = []string{"#"}
@@ -120,13 +98,13 @@ func parse(src io.Reader) (*Header, []Event, error) {
 	}
 
 	// Remaining lines are events.
-	var events []Event
+	var events []jsonl.Event
 	for s.Next() {
 		line, err := s.Line()
 		if err != nil {
 			return nil, nil, err
 		}
-		var event Event
+		var event jsonl.Event
 		if err := line.Scan(&event); err != nil {
 			return nil, nil, fmt.Errorf("parsing event: %w", err)
 		}

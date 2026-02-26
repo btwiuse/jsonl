@@ -21,6 +21,8 @@ type ServerSession interface {
 	io.Closer
 
 	// NextResize blocks until the next resize event from the client.
+	// Up to 8 resize events are buffered; if the buffer is full, new
+	// resize events are dropped until the caller consumes one.
 	// Returns io.EOF when the session is closed.
 	NextResize() (*Event, error)
 }

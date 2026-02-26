@@ -96,6 +96,9 @@ func (s *Scanner) Next() bool {
 
 		raw = bytes.TrimRightFunc(raw, unicode.IsSpace)
 		if len(raw) == 0 {
+			if err == io.EOF {
+				return false
+			}
 			if s.SkipBlank {
 				continue
 			} else {
@@ -104,6 +107,9 @@ func (s *Scanner) Next() bool {
 			}
 		}
 		if hasPrefixAny(string(raw), s.SkipComments) {
+			if err == io.EOF {
+				return false
+			}
 			continue
 		}
 

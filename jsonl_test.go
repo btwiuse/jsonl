@@ -130,6 +130,18 @@ func TestReadAll(t *testing.T) {
 	})
 }
 
+func TestReadAllTrailingNewline(t *testing.T) {
+	// Trailing newline should not cause an infinite loop.
+	src := bytes.NewBufferString(FixtureString + "\n")
+	testReadAll(t, src)
+}
+
+func TestReadAllTrailingCommentAndNewline(t *testing.T) {
+	// Trailing comment at EOF should not cause an infinite loop.
+	src := bytes.NewBufferString(FixtureString + "\n# trailing comment\n")
+	testReadAll(t, src)
+}
+
 func TestScannerError(t *testing.T) {
 	rd := bytes.NewBufferString(FixturesStringComments)
 	scan := jsonl.NewScanner(rd)
